@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest an improvement to SKIG or its documentation.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: Search existing issues first. Describe the need without including private project data.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe your use case and who would benefit.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested improvement
+      description: Describe the behaviour or documentation you would like.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives or workarounds
+      description: Optional. What have you tried or considered?

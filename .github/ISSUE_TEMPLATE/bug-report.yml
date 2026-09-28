@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a problem installing or using SKIG.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Search existing issues first. Include only information you can share publicly;
+        remove credentials and private project data from commands and logs.
+  - type: input
+    id: version
+    attributes:
+      label: SKIG version
+      description: Paste the output of skig --version, or the release you tried to install.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system and architecture
+      description: Include your Linux distribution, CPU architecture and whether you use WSL.
+      placeholder: Ubuntu 24.04, x86_64, WSL 2
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Usage mode
+      options:
+        - Git repository
+        - Central server
+        - Installation or startup
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include the commands or actions needed to reproduce the problem.
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Describe what happened and include any error message.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or additional context
+      description: Optional. Remove credentials and private project data before posting.
+      render: text

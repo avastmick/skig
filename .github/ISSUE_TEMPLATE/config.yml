@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Usage guides
+    url: https://github.com/avastmick/skig/wiki
+    about: Read installation, Git, central-server and agent integration guides.
