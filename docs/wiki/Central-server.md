@@ -10,6 +10,10 @@ qualification, full remote CLI parity or broader migration capability.
 
 ## Deployment requirements
 
+See [server setup and configuration](https://github.com/avastmick/skig/wiki/Server-setup)
+for the administrator sequence, runtime settings and current bootstrap gaps.
+The public release does not automatically initialise PostgreSQL or Keycloak.
+
 An administrator provides:
 
 - A compatible `skig-server` release and PostgreSQL database.

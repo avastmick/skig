@@ -14,6 +14,9 @@ Windows users need a compatible WSL environment.
    or [a central server](https://github.com/avastmick/skig/wiki/Central-server).
 3. Connect your tools using [agent integration](https://github.com/avastmick/skig/wiki/Agent-integration).
 
+Administrators: see [server setup and configuration](https://github.com/avastmick/skig/wiki/Server-setup)
+for the required services, settings and alpha deployment gaps.
+
 See [troubleshooting](https://github.com/avastmick/skig/wiki/Troubleshooting)
 when something goes wrong, or check the
 [supported standards](https://github.com/avastmick/skig/wiki/Standards).
