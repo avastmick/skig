@@ -38,7 +38,8 @@ your deployment.
 3. Choose the database mode **before initialisation**. For a new, empty alpha
    database using scheduled database backups, run
    `skig-server initialise-database-backup` with the owner credential. It creates
-   the schema and records the mode. Do not run `migrate` first: ordinary migration
+   the schema and records the mode; the current schema must be `public`.
+   Do not run `migrate` first: ordinary migration
    selects the separate protected mode. These modes are not interchangeable.
 4. Configure the identity provider and obtain the authorised provisioning actor's
    token. `skig-server grant` permits an exact principal to provision an absent
@@ -62,11 +63,16 @@ Public seed/request generation and a complete first-graph demonstration remain
 deployment gaps. The empty-database initialiser refuses repeat use; do not run it
 as a normal startup command.
 
+Protected mode additionally requires a `skig.hosted-runtime.v1` selection with
+trusted checkpoints and private recovery directories. Running `migrate` alone
+does not prepare a registered service for startup.
+
 In database-backup mode, the runtime role needs database `CONNECT`, schema
 `USAGE`, `SELECT`/`INSERT`/`UPDATE` on the fifteen namespace tables, read access
 to mode/migration metadata, and execution of product functions. It must not have
 `DELETE`, `TRUNCATE`, DDL privileges or owner/backup role membership. The release
-does not include a role-bootstrap SQL manifest.
+does not include a role-bootstrap SQL manifest. Namespace tables retain forced
+row-level security.
 
 ## Runtime configuration
 
@@ -98,6 +104,11 @@ The server listens over HTTP; remote HTTPS requires an administrator-managed
 reverse proxy or equivalent TLS termination. The registered selection's `source`
 contains `organisation_id`, `module_id`, `graph_id`, `graph_iri`, `authority` and
 `profile`, copied from the actual registration.
+
+Database-backup runtime mode optionally accepts `SKIG_SERVER_POC_HTTP_JWKS_URI`
+for one explicitly trusted HTTP key endpoint, exactly matching the configured
+JWKS URI. This runtime-only exception does not apply to `provision`, which uses
+the normal verifier requiring HTTPS or loopback HTTP for key retrieval.
 
 ## Client configuration template
 
