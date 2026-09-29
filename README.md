@@ -68,9 +68,31 @@ SQLite is a disposable local query cache. This mode needs no central SKIG server
 Teams can run **`skig-server`**, backed by PostgreSQL, to hold a shared graph and
 manage access centrally. The CLI and MCP integration connect to that server.
 
-Your administrator provisions the graph, grants access and supplies the project's
-`.skig/authority-config.json`, selecting `local_server` or `remote_server`.
-Remote connections use HTTPS. In the configured project, run:
+### Set up a server
+
+**Server deployment is administrator-managed in this alpha.** The installer above
+installs only the CLI and dispatcher. Downloading the separate
+`skig-server-linux-x86_64` binary does not start PostgreSQL or Keycloak, configure
+authentication, or create a usable project graph.
+
+An administrator needs to:
+
+1. Set up PostgreSQL, an OIDC identity provider such as Keycloak, and telemetry.
+2. Initialise the database, provision the graph and registration, and grant access.
+3. Configure and run `skig-server`, with persistent storage, backups and HTTPS
+   for remote connections.
+4. Supply each client project with its matching configuration and toolchain version.
+
+Follow the [server setup and configuration guide](https://github.com/avastmick/skig/wiki/Server-setup)
+for the available commands, settings and configuration template. **The alpha has
+no complete public bootstrap package or verified fresh-machine setup recipe.**
+Git-based usage works without PostgreSQL, Keycloak or server login.
+
+### Connect to an existing server
+
+Obtain the project's `.skig/authority-config.json` from your administrator. It
+selects the server and registered graph using `local_server` or `remote_server`.
+Once the server is running and your access is granted, run inside that project:
 
 ```bash
 skig auth login
@@ -81,11 +103,12 @@ skig task available
 Follow the displayed URL and device code to sign in through the deployment's
 identity provider. Signing in does not itself grant graph access. Credentials
 are stored privately outside the repository and refreshed automatically.
+`skig auth login` does not start or configure a server.
 
 In server mode, the server holds the authoritative graph. Supported commands
 read and update it directly; a connection failure does not switch to local Git
-storage. Administrators can download `skig-server-linux-x86_64` from the same
-release and inspect deployment options with `skig-server --help` after installation.
+storage. See [central-server usage](https://github.com/avastmick/skig/wiki/Central-server)
+for client authentication and access details.
 
 ## Supported standards
 
