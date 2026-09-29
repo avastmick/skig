@@ -34,14 +34,24 @@ args = sys.argv[1:]
 url = next(a for a in args if a.startswith('https://'))
 with open(os.environ['REQUEST_LOG'], 'a') as log:
     log.write(url + '\\n')
-if url.endswith('/latest'):
-    print('https://github.com/avastmick/skig/releases/tag/v0.0.303', end='')
-else:
-    name = url.rsplit('/', 1)[1]
-    if os.environ.get('FAIL_ASSET') == name:
-        sys.exit(22)
-    shutil.copyfile(pathlib.Path(os.environ['ASSETS']) / name,
-                  args[args.index('--output') + 1])
+name = url.rsplit('/', 1)[1]
+if os.environ.get('FAIL_ASSET') == name:
+    sys.exit(22)
+shutil.copyfile(pathlib.Path(os.environ['ASSETS']) / name,
+              args[args.index('--output') + 1])
+''')
+        self.write_tool("git", '''#!/usr/bin/env python3
+import os, sys
+if os.environ.get('FAIL_GIT'):
+    sys.exit(1)
+mode = os.environ.get('TAG_MODE', 'normal')
+print('abc refs/tags/v0.0.303')
+print('def refs/tags/v9.0.0')
+print('commit refs/tags/v0.0.303^{}')
+if mode != 'missing':
+    print(('other' if mode == 'unmatched' else 'abc') + ' refs/tags/latest')
+if mode == 'ambiguous':
+    print('abc refs/tags/v0.0.304')
 ''')
         self.env = dict(os.environ, PATH=f"{self.bin}:{os.environ['PATH']}",
                         SKIG_INSTALL_DIR=str(self.dest), SKIG_VERSION="0.0.303",
@@ -83,16 +93,29 @@ else:
         result = self.run_install(SKIG_VERSION="latest")
         self.assertEqual(result.returncode, 0, result.stderr)
         requests = (self.root / "requests").read_text().splitlines()
-        self.assertTrue(requests[0].endswith('/latest'))
-        self.assertEqual(len(requests), 4)
-        self.assertTrue(all('/download/v0.0.303/' in url for url in requests[1:]))
+        self.assertEqual(len(requests), 3)
+        self.assertTrue(all('/download/v0.0.303/' in url for url in requests))
 
-    def test_default_selects_alpha_without_latest_lookup(self):
+    def test_default_resolves_latest_alpha(self):
         result = self.run_install(SKIG_VERSION="")
         self.assertEqual(result.returncode, 0, result.stderr)
         requests = (self.root / "requests").read_text().splitlines()
         self.assertEqual(len(requests), 3)
         self.assertTrue(all('/download/v0.0.303/' in url for url in requests))
+
+    def test_invalid_latest_preserves_installation(self):
+        for mode in ('missing', 'unmatched', 'ambiguous'):
+            with self.subTest(mode=mode):
+                self.assert_preserved(self.run_install(SKIG_VERSION='latest', TAG_MODE=mode))
+        self.assertFalse((self.root / 'requests').exists())
+
+    def test_latest_network_failure(self):
+        self.assert_preserved(self.run_install(SKIG_VERSION='latest', FAIL_GIT='1'))
+        self.assertFalse((self.root / 'requests').exists())
+
+    def test_explicit_version_does_not_resolve_latest(self):
+        result = self.run_install(FAIL_GIT='1')
+        self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_v_prefix(self):
         result = self.run_install(SKIG_VERSION="v0.0.303")

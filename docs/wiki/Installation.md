@@ -7,12 +7,12 @@ use a compatible WSL Linux environment. macOS support will follow.
 
 ## Quick install
 
-With Bash, curl and standard GNU command-line utilities installed, run:
+With Bash, curl, Git and standard GNU command-line utilities installed, run:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -fsSL \
   https://raw.githubusercontent.com/avastmick/skig/main/scripts/install.sh \
-  | SKIG_VERSION=0.0.303 bash
+  | bash
 export PATH="$HOME/.local/bin:$PATH"
 skig --version
 ```
@@ -29,8 +29,11 @@ destination to customise installation:
 SKIG_VERSION=0.0.303 SKIG_INSTALL_DIR="$HOME/bin" bash install.sh
 ```
 
-Without `SKIG_VERSION`, the installer selects v0.0.303 Alpha explicitly.
-`SKIG_VERSION=latest` asks GitHub for a non-prerelease and does not select Alpha.
+Without `SKIG_VERSION`, the installer follows the project's moving `latest` tag,
+currently pointing to v0.0.303 Alpha. `SKIG_VERSION=latest` does the same.
+It resolves the tag once and downloads all assets from that numbered release.
+This includes alpha releases and does not use GitHub's non-prerelease-only
+latest-release endpoint. Git is needed only when resolving `latest`.
 Add your chosen installation directory to `PATH`; no sudo is needed.
 
 ## Manual download and verification

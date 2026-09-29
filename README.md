@@ -1,5 +1,8 @@
 # SKIG — System Knowledge and Intent Graph
 
+> **Alpha software:** Server mode is unproven for everyday usage and is not
+> production ready. Local Git usage through the CLI is solid.
+
 SKIG connects a project's requirements, architecture decisions, constraints,
 tasks, code, tests and evidence in a shared knowledge graph. It helps people and
 AI agents understand what a system should do, why it exists and how its
@@ -27,12 +30,12 @@ Bug reports and suggestions are welcome.
 See [release notes](https://github.com/avastmick/skig/releases/tag/v0.0.303)
 for requirements and limitations. Alpine/musl and ARM are not supported.
 
-Install with Bash and curl:
+Install with Bash, curl and Git:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -fsSL \
   https://raw.githubusercontent.com/avastmick/skig/main/scripts/install.sh \
-  | SKIG_VERSION=0.0.303 bash
+  | bash
 export PATH="$HOME/.local/bin:$PATH"
 skig --version
 ```
@@ -40,6 +43,8 @@ skig --version
 The installer checks SHA-256 checksums and binary versions, then installs to
 `~/.local/bin` without sudo. Set `SKIG_INSTALL_DIR` to choose another directory.
 Add the `export PATH` line to your shell startup file if needed.
+By default it follows the `latest` tag, including alpha releases. Set
+`SKIG_VERSION` to select a specific published version.
 
 The dispatcher selects the version pinned by each project; older installed
 versions are retained. No Rust toolchain or private source access is required.

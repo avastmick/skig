@@ -21,15 +21,27 @@ main() {
         command -v "$dependency" >/dev/null || fail "Missing required command: $dependency"
     done
 
-    requested=${SKIG_VERSION:-0.0.303}
+    requested=${SKIG_VERSION:-latest}
     release_root=https://github.com/avastmick/skig/releases
     if [[ $requested == latest ]]; then
-        # Resolve once so all assets come from the same release, even during updates.
-        resolved=$(download --output /dev/null --write-out '%{url_effective}' \
-            "$release_root/latest") ||
-            fail 'No latest release is available. Check Releases or set SKIG_VERSION explicitly.'
-        [[ $resolved == "$release_root/tag/"* ]] || fail 'Unexpected latest-release URL.'
-        requested=${resolved##*/}
+        command -v git >/dev/null || fail 'Git is required to resolve latest; install Git or set SKIG_VERSION.'
+        # latest aliases the numbered tag object. Resolve both in one snapshot,
+        # then use only the numbered release URLs throughout this installation.
+        refs=$(GIT_TERMINAL_PROMPT=0 git ls-remote --tags \
+            https://github.com/avastmick/skig.git 'refs/tags/latest' 'refs/tags/v*') ||
+            fail 'Could not resolve latest. Check connectivity or set SKIG_VERSION.'
+        requested=$(printf '%s\n' "$refs" | awk '
+            $2 == "refs/tags/latest" {latest = $1}
+            $2 ~ /^refs\/tags\/v[0-9]+\.[0-9]+\.[0-9]+$/ {versions[$2] = $1}
+            END {
+                if (latest == "") exit 1
+                for (name in versions) if (versions[name] == latest) {
+                    sub(/^refs\/tags\//, "", name)
+                    print name
+                }
+            }') || fail 'The latest tag is missing.'
+        [[ $requested =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] ||
+            fail 'The latest tag must identify exactly one numbered release tag.'
     fi
     version=${requested#v}
     [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] ||
