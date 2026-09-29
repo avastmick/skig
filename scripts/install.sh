@@ -21,7 +21,7 @@ main() {
         command -v "$dependency" >/dev/null || fail "Missing required command: $dependency"
     done
 
-    requested=${SKIG_VERSION:-latest}
+    requested=${SKIG_VERSION:-0.0.303}
     release_root=https://github.com/avastmick/skig/releases
     if [[ $requested == latest ]]; then
         # Resolve once so all assets come from the same release, even during updates.
@@ -33,7 +33,7 @@ main() {
     fi
     version=${requested#v}
     [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] ||
-        fail 'SKIG_VERSION must be latest or a release version such as 3.0.2.'
+        fail 'SKIG_VERSION must be latest or a release version such as 0.0.303.'
 
     destination=${SKIG_INSTALL_DIR:-${HOME:?HOME is required}/.local/bin}
     mkdir -p -- "$destination"

@@ -1,6 +1,6 @@
 # Server setup and configuration
 
-**SKIG v3.0.2 is an alpha release and is not production ready.** Server setup
+**SKIG v0.0.303 is an alpha release and is not production ready.** Server setup
 currently requires an administrator-managed deployment. The public release does
 not include a complete PostgreSQL/Keycloak bootstrap package.
 
@@ -157,6 +157,7 @@ The alpha does not claim full remote CLI parity or a generally available
 Git-to-server migration. Creating or seeding a graph is not proof of a
 history-preserving migration.
 
-This reference was checked against the released v3.0.2 command help and tagged
+The deployment command contract remains unchanged from v3.0.2. This reference
+was originally checked against that command help and tagged
 source contracts. A fresh-machine PostgreSQL/Keycloak deployment was not
 performed or qualified for this guide.

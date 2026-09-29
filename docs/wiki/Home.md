@@ -5,7 +5,7 @@ tests and evidence so people and agents can follow a system's intent through
 to its implementation.
 
 SKIG is free of charge to download and use. Its source code is private.
-The initial v3.0.2 release is an alpha release and is not production ready.
+The v0.0.303 product-number reset is an alpha release and is not production ready.
 Linux x86_64 with glibc 2.39 or newer is supported; macOS will follow.
 Windows users need a compatible WSL environment.
 

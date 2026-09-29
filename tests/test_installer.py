@@ -22,9 +22,9 @@ class InstallerTests(unittest.TestCase):
         for directory in (self.assets, self.bin, self.dest):
             directory.mkdir()
         self.cli = self.assets / "skig-linux-x86_64"
-        self.cli.write_text('#!/bin/bash\nprintf "skig 3.0.2\\n"\n')
+        self.cli.write_text('#!/bin/bash\nprintf "skig 0.0.303\\n"\n')
         (self.assets / "skig-dispatcher-linux-x86_64").write_text(
-            '#!/bin/bash\nexec "$(dirname "$0")/skig-v3.0.2" "$@"\n'
+            '#!/bin/bash\nexec "$(dirname "$0")/skig-v0.0.303" "$@"\n'
         )
         self.manifest()
         self.write_tool("uname", '#!/bin/bash\ncase "$1" in -s) echo Linux;; -m) echo x86_64;; esac\n')
@@ -35,7 +35,7 @@ url = next(a for a in args if a.startswith('https://'))
 with open(os.environ['REQUEST_LOG'], 'a') as log:
     log.write(url + '\\n')
 if url.endswith('/latest'):
-    print('https://github.com/avastmick/skig/releases/tag/v3.0.2', end='')
+    print('https://github.com/avastmick/skig/releases/tag/v0.0.303', end='')
 else:
     name = url.rsplit('/', 1)[1]
     if os.environ.get('FAIL_ASSET') == name:
@@ -44,7 +44,7 @@ else:
                   args[args.index('--output') + 1])
 ''')
         self.env = dict(os.environ, PATH=f"{self.bin}:{os.environ['PATH']}",
-                        SKIG_INSTALL_DIR=str(self.dest), SKIG_VERSION="3.0.2",
+                        SKIG_INSTALL_DIR=str(self.dest), SKIG_VERSION="0.0.303",
                         ASSETS=str(self.assets), REQUEST_LOG=str(self.root / "requests"))
         self.old = self.dest / "skig"
         self.old.write_text("old dispatcher\n")
@@ -75,7 +75,7 @@ else:
             result = self.run_install()
             self.assertEqual(result.returncode, 0, result.stderr)
         output = subprocess.check_output([str(self.old), "--version"], text=True)
-        self.assertEqual(output, "skig 3.0.2\n")
+        self.assertEqual(output, "skig 0.0.303\n")
         self.assertTrue((self.dest / "skig-v2.0.0").exists())
         self.assertFalse(list(self.dest.glob(".skig-*")))
 
@@ -85,10 +85,17 @@ else:
         requests = (self.root / "requests").read_text().splitlines()
         self.assertTrue(requests[0].endswith('/latest'))
         self.assertEqual(len(requests), 4)
-        self.assertTrue(all('/download/v3.0.2/' in url for url in requests[1:]))
+        self.assertTrue(all('/download/v0.0.303/' in url for url in requests[1:]))
+
+    def test_default_selects_alpha_without_latest_lookup(self):
+        result = self.run_install(SKIG_VERSION="")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        requests = (self.root / "requests").read_text().splitlines()
+        self.assertEqual(len(requests), 3)
+        self.assertTrue(all('/download/v0.0.303/' in url for url in requests))
 
     def test_v_prefix(self):
-        result = self.run_install(SKIG_VERSION="v3.0.2")
+        result = self.run_install(SKIG_VERSION="v0.0.303")
         self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_failed_download(self):
@@ -99,7 +106,7 @@ else:
         self.cli.write_text(f'#!/bin/bash\ntouch "{marker}"\n')
         self.assert_preserved(self.run_install())
         self.assertFalse(marker.exists())
-        self.assertFalse((self.dest / "skig-v3.0.2").exists())
+        self.assertFalse((self.dest / "skig-v0.0.303").exists())
 
     def test_missing_and_duplicate_checksums(self):
         manifest = self.assets / "SHA256SUMS"
@@ -117,10 +124,10 @@ else:
         (self.assets / "skig-dispatcher-linux-x86_64").write_text('#!/bin/bash\nexit 1\n')
         self.manifest()
         self.assert_preserved(self.run_install())
-        self.assertFalse((self.dest / "skig-v3.0.2").exists())
+        self.assertFalse((self.dest / "skig-v0.0.303").exists())
 
     def test_existing_version_conflict(self):
-        target = self.dest / "skig-v3.0.2"
+        target = self.dest / "skig-v0.0.303"
         target.write_text("different content\n")
         target.chmod(0o755)
         self.assert_preserved(self.run_install())

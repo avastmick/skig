@@ -23,8 +23,8 @@ Bug reports and suggestions are welcome.
 
 ## Install
 
-**SKIG v3.0.2 is an alpha release and is not production ready.**
-See [release notes](https://github.com/avastmick/skig/releases/tag/v3.0.2)
+**SKIG v0.0.303 is an alpha release and is not production ready.**
+See [release notes](https://github.com/avastmick/skig/releases/tag/v0.0.303)
 for requirements and limitations. Alpine/musl and ARM are not supported.
 
 Install with Bash and curl:
@@ -32,7 +32,7 @@ Install with Bash and curl:
 ```bash
 curl --proto '=https' --tlsv1.2 -fsSL \
   https://raw.githubusercontent.com/avastmick/skig/main/scripts/install.sh \
-  | SKIG_VERSION=3.0.2 bash
+  | SKIG_VERSION=0.0.303 bash
 export PATH="$HOME/.local/bin:$PATH"
 skig --version
 ```
@@ -44,7 +44,10 @@ Add the `export PATH` line to your shell startup file if needed.
 The dispatcher selects the version pinned by each project; older installed
 versions are retained. No Rust toolchain or private source access is required.
 See the [installation guide](https://github.com/avastmick/skig/wiki/Installation)
-for manual installation and upgrades.
+for manual installation and the explicit **v3.0.2 → v0.0.303** reset.
+Product numbering does not change authority schema, ontology profile or graph
+data. Local Git and server use remain equally supported; neither a repository
+pin nor a running server changes merely because binaries were downloaded.
 
 ## Use with Git
 

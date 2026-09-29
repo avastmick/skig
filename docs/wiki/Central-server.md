@@ -4,7 +4,7 @@ Use `skig-server` when a team needs a shared graph with centrally managed access
 The server stores the authoritative graph in PostgreSQL. CLI commands and MCP
 tools use the same selected graph and access grants.
 
-The v3.0.2 public release is an alpha and is not production ready. Its server binary passes a version
+The v0.0.303 public release is an alpha and is not production ready. Its server binary passes a version
 contract smoke check; this release does not claim new server deployment
 qualification, full remote CLI parity or broader migration capability.
 
