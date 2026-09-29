@@ -5,7 +5,9 @@ tests and evidence so people and agents can follow a system's intent through
 to its implementation.
 
 SKIG is free of charge to download and use. Its source code is private.
-Linux x86_64 is supported initially; macOS will follow. Windows users need WSL.
+The initial v3.0.2 release is an alpha release and is not production ready.
+Linux x86_64 with glibc 2.39 or newer is supported; macOS will follow.
+Windows users need a compatible WSL environment.
 
 1. [Install SKIG](https://github.com/avastmick/skig/wiki/Installation).
 2. Choose [Git-based usage](https://github.com/avastmick/skig/wiki/Git-workflow)

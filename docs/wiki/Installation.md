@@ -1,12 +1,42 @@
 # Installation
 
-SKIG initially supports Linux x86_64. On Windows, run these steps inside a
-compatible WSL Linux environment. macOS support will follow.
+SKIG v3.0.2 is an **alpha release and is not production ready**.
+It requires Linux x86_64, glibc 2.39 or newer, `libgcc_s.so.1`, and the standard
+Linux x86_64 dynamic loader. Alpine/musl and ARM are not supported. On Windows,
+use a compatible WSL Linux environment. macOS support will follow.
 
-## Download and verify
+## Quick install
+
+With Bash, curl and standard GNU command-line utilities installed, run:
+
+```bash
+curl --proto '=https' --tlsv1.2 -fsSL \
+  https://raw.githubusercontent.com/avastmick/skig/main/scripts/install.sh \
+  | SKIG_VERSION=3.0.2 bash
+export PATH="$HOME/.local/bin:$PATH"
+skig --version
+```
+
+You can [inspect the installer](https://github.com/avastmick/skig/blob/main/scripts/install.sh)
+or download it and run it with Bash. It verifies checksums and binary versions
+before installing the CLI and dispatcher. Failed download or validation leaves
+an existing installation unchanged.
+
+Set `SKIG_VERSION` to a published version and `SKIG_INSTALL_DIR` to a writable
+destination to customise installation:
+
+```bash
+SKIG_VERSION=3.0.2 SKIG_INSTALL_DIR="$HOME/bin" bash install.sh
+```
+
+Without `SKIG_VERSION`, the installer selects GitHub's latest non-prerelease.
+Use the explicit version above while only the alpha prerelease is available.
+Add your chosen installation directory to `PATH`; no sudo is needed.
+
+## Manual download and verification
 
 Open [Releases](https://github.com/avastmick/skig/releases) and choose a version.
-If no release is listed, public binaries are not yet available.
+Read its release notes before installing.
 
 Download these assets from the same release into an empty directory:
 

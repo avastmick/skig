@@ -16,42 +16,35 @@ Bug reports and suggestions are welcome.
 
 ## Platforms
 
-- **Linux:** supported initially, with x86_64 binaries.
+- **Linux:** x86_64 with glibc 2.39 or newer and `libgcc_s.so.1`.
 - **macOS:** support will follow.
 - **Windows:** no native support is planned. Run the Linux version inside Windows
   Subsystem for Linux (WSL), using a compatible x86_64 Linux environment.
 
 ## Install
 
-Public binaries will appear on the [Releases page](https://github.com/avastmick/skig/releases).
-No public release has been published yet.
+**SKIG v3.0.2 is an alpha release and is not production ready.**
+See [release notes](https://github.com/avastmick/skig/releases/tag/v3.0.2)
+for requirements and limitations. Alpine/musl and ARM are not supported.
 
-Once a release is available:
+Install with Bash and curl:
 
-1. Download `skig-linux-x86_64`, `skig-dispatcher-linux-x86_64` and `SHA256SUMS`
-   from the **same release** into an empty directory.
-2. In that directory, verify the downloads:
+```bash
+curl --proto '=https' --tlsv1.2 -fsSL \
+  https://raw.githubusercontent.com/avastmick/skig/main/scripts/install.sh \
+  | SKIG_VERSION=3.0.2 bash
+export PATH="$HOME/.local/bin:$PATH"
+skig --version
+```
 
-   ```bash
-   sha256sum --ignore-missing --check SHA256SUMS
-   ```
+The installer checks SHA-256 checksums and binary versions, then installs to
+`~/.local/bin` without sudo. Set `SKIG_INSTALL_DIR` to choose another directory.
+Add the `export PATH` line to your shell startup file if needed.
 
-   Continue only when both downloaded binaries report `OK`.
-3. Install them, replacing `X.Y.Z` with the release version without its `v` prefix:
-
-   ```bash
-   VERSION=X.Y.Z
-   mkdir -p "$HOME/.local/bin"
-   install -m 0755 skig-linux-x86_64 "$HOME/.local/bin/skig-v$VERSION"
-   install -m 0755 skig-dispatcher-linux-x86_64 "$HOME/.local/bin/skig"
-   export PATH="$HOME/.local/bin:$PATH"
-   skig --version
-   ```
-
-Add the `export PATH` line to your shell startup file if needed. The dispatcher
-selects the version pinned by each project; keep older versioned binaries when
-other projects still need them. Installation requires no Rust toolchain or
-access to SKIG's source code.
+The dispatcher selects the version pinned by each project; older installed
+versions are retained. No Rust toolchain or private source access is required.
+See the [installation guide](https://github.com/avastmick/skig/wiki/Installation)
+for manual installation and upgrades.
 
 ## Use with Git
 
